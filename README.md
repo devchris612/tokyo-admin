@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+How to run this app locally
 
-## Getting Started
+##### Description:
 
-First, run the development server:
+This app has three components: a front-end for the admin dashboard, a front-end for the main UI, and a back-end that includes a Nest.js REST API server and a MongoDB image pulled from Docker.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+##### Tech stack:
+
+- Front-end: HTML, CSS, Next.js App Router
+- UI library: ShadCN
+- Back-end: Nest.js, Mongoose
+- Database: MongoDB
+- Other: Docker, CSS Module
+
+# Backend:
+
+1. First, `cd` into `backend` folder.
+
+```
+cd backend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Then, run docker-compose up to launch the backend app with mongodb Docker image
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+docker-compose up
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Please go to Postman and call the following apis to seed data:
 
-## Learn More
+- Seed songs data:
 
-To learn more about Next.js, take a look at the following resources:
+```
+POST: http://localhost:4000/songs/seed
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Seed users data:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```
+POST: http://localhost:4000/users/seed
+```
 
-## Deploy on Vercel
+You should now have a set of users and songs data initialized in the MongoDB container.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. All the variables are stored in `docker-compose.yml` for now so you can run the project more conveniently using `docker-compose up`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Frontend: Music Market (main UI)
+
+1. First, `cd` into `frontend` folder:
+
+```
+cd frontend
+```
+
+2. Run `npm install` to install all the dependencies.
+3. Run `npm run dev` to launch the app.
+4. Create `.env.local` file and paste the following:
+
+```
+NEXT_PUBLIC_API_URL=http://localhost:4000
+```
+
+# Admin dashboard
+
+1. First, `cd` into `admin-dashboard` folder:
+
+```
+cd admin-dashboard
+```
+
+2. Run `npm install` to install all the dependencies.
+3. Run `npm run dev` to launch the app.
+4. Credentials for admin:
+
+- Username: user
+- Password: password
+
+5. Create a `.env.local` file and paste the following:
+
+```
+NEXT_PUBLIC_BACKEND_URL=http://localhost:4000
+NEXT_PUBLIC_ADMIN_USERNAME=user
+NEXT_PUBLIC_HASHED_ADMIN_PASSWORD=sQnzu7wkTrgkQZF+0G1hi5AI3Qmzvv0bXgc5THBqi7mAsdd4Xll27ASbRt9fEyavWi6m0QP9B8lThf+rDKy8hg==
+# password is: password
+```
+
+# Plans to improve:
+
+1. Create "view more" pages for "Top Songs" and "Newest Songs" with infinite scrolls.
+2. Leverage authentication flow with refresh token to maintain users' sessions.
+3. Write unit tests and e2e testing for both front and back ends.
+4. Setup SMTP with Mailtrap to send email for "Forgot password" feature
+5. Deploy the application
+6. Configure file storage system to store images instead of using straight urls
